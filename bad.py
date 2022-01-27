@@ -39,8 +39,10 @@ class Bot:
             # Get move with lowest rank available, of any suit
             for index, move in enumerate(moves):
                 if move[0] is not None and move[0] % 5 >= chosen_move[0] % 5:
-                    chosen_move = move #mybot tries to always choose the move with the lowest rank of any suit
-            
+                    if Deck.get_suit(move[0]) == state.get_trump_suit(): 
+                        continue
+                    chosen_move = move #mybot tries to always choose the move with the lowest rank of any suit     
+
             return chosen_move
         
         else: # if the current phase is 2
@@ -51,8 +53,9 @@ class Bot:
                     moves_trump_suit.append(move)
             
             if len(moves_trump_suit) > 0:
-                chosen_move = moves_trump_suit[0] #if mybot has a trump card he chooses that card
-                return chosen_move
+                for index, move in enumerate(moves_trump_suit):
+                    if move[0] is not None and move[0] % 5 <= chosen_move[0] % 5:
+                        chosen_move = move #if mybot has one or more trump cards it chooses the highest trump card
             return chosen_move
                 
         
